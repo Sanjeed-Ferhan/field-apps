@@ -1,0 +1,15 @@
+# Portfolio assets and local tooling
+*.jpg
+*.jpeg
+*.png
+logs/
+.playwright-mcp/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Node
+node_modules/
+npm-debug.log*

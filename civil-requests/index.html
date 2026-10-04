@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>CivilDesk - Factory Civil Work Requests</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <div>
+        <h1>CivilDesk</h1>
+        <small>Factory civil work requests</small>
+      </div>
+    </div>
+    <span class="count"><b id="count">0</b> open</span>
+  </header>
+
+  <main>
+    <!-- NEW REQUEST -->
+    <section id="view-new" class="view active">
+      <form id="reqForm" class="card">
+        <h2>Raise a Requirement</h2>
+
+        <label class="photo-picker" id="photoPicker">
+          <input type="file" id="photo" accept="image/*" capture="environment" hidden />
+          <img id="preview" alt="" hidden />
+          <div class="photo-placeholder" id="photoPlaceholder">
+            <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9Zm3 5.5A4.5 4.5 0 1 1 7.5 13 4.5 4.5 0 0 1 12 8.5Zm0 2A2.5 2.5 0 1 0 14.5 13 2.5 2.5 0 0 0 12 10.5Z"/></svg>
+            <span>Tap to attach a photo</span>
+          </div>
+        </label>
+
+        <div class="grid2">
+          <div class="field">
+            <label class="label" for="category">Work category</label>
+            <select id="category">
+              <option value="">Select...</option>
+              <option>Civil / Structural</option>
+              <option>Plumbing</option>
+              <option>Electrical (civil)</option>
+              <option>Painting</option>
+              <option>Flooring / Tiles</option>
+              <option>Roofing / Waterproofing</option>
+              <option>Road / Drain</option>
+              <option>Carpentry</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="requester">Requested by</label>
+            <input id="requester" type="text" placeholder="Name / Emp ID" autocomplete="name" />
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">Priority</span>
+          <div class="seg" id="priority">
+            <button type="button" class="pri" data-value="low">Low</button>
+            <button type="button" class="pri" data-value="medium">Medium</button>
+            <button type="button" class="pri" data-value="high">High</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="place">Location on site</label>
+          <input id="place" type="text" placeholder="e.g. Block B, 2nd floor, near AHU room" autocomplete="off" />
+          <div class="loc-row">
+            <button type="button" id="locateBtn" class="locate">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4Zm8.9 3a9 9 0 0 0-7.9-7.9V1h-2v2.1A9 9 0 0 0 3.1 11H1v2h2.1a9 9 0 0 0 7.9 7.9V23h2v-2.1a9 9 0 0 0 7.9-7.9H23v-2ZM12 19a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></svg>
+              <span id="locText">Use my GPS location</span>
+            </button>
+            <button type="button" id="clearLoc" class="clear-loc" hidden>Clear</button>
+          </div>
+          <small class="help">Type the location manually, use GPS, or both.</small>
+        </div>
+
+        <div class="field">
+          <label class="label" for="desc">Work required</label>
+          <textarea id="desc" rows="3" placeholder="Describe what needs to be done..."></textarea>
+        </div>
+
+        <button type="submit" class="primary" id="saveBtn">Submit Request</button>
+      </form>
+    </section>
+
+    <!-- MAP -->
+    <section id="view-map" class="view">
+      <div id="map"></div>
+      <p class="hint" id="mapHint">GPS-tagged requests appear here. Type-only locations show in the list.</p>
+    </section>
+
+    <!-- LIST -->
+    <section id="view-list" class="view">
+      <div class="filters" id="filters">
+        <button class="chip on" data-filter="all">All</button>
+        <button class="chip" data-filter="open">Open</button>
+        <button class="chip" data-filter="progress">In progress</button>
+        <button class="chip" data-filter="done">Done</button>
+      </div>
+      <div id="list" class="list"></div>
+      <div class="list-tools">
+        <button type="button" id="exportBtn" class="ghost">Export JSON</button>
+        <button type="button" id="clearBtn" class="ghost danger">Clear all</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-view="new" class="tab active">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>
+      <span>New</span>
+    </button>
+    <button data-view="map" class="tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Zm0 2.2 4 1.3v11.3l-4-1.3V5.2Zm6 12.6V6.5l4-1.3v11.3l-4 1.3Z"/></svg>
+      <span>Map</span>
+    </button>
+    <button data-view="list" class="tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg>
+      <span>Requests</span>
+    </button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>RoadWatch - Report Broken Roads</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>RoadWatch</h1>
+    </div>
+    <span class="count"><b id="count">0</b> reports</span>
+  </header>
+
+  <main>
+    <section id="view-report" class="view active">
+      <form id="reportForm" class="card">
+        <h2>New Report</h2>
+
+        <label class="photo-picker" id="photoPicker">
+          <input type="file" id="photo" accept="image/*" capture="environment" hidden />
+          <img id="preview" alt="" hidden />
+          <div class="photo-placeholder" id="photoPlaceholder">
+            <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9Zm3 5.5A4.5 4.5 0 1 1 7.5 13 4.5 4.5 0 0 1 12 8.5Zm0 2A2.5 2.5 0 1 0 14.5 13 2.5 2.5 0 0 0 12 10.5Z"/></svg>
+            <span>Tap to take a photo</span>
+          </div>
+        </label>
+
+        <div class="field">
+          <span class="label">Severity</span>
+          <div class="severity" id="severity">
+            <button type="button" class="sev" data-value="low">Low</button>
+            <button type="button" class="sev" data-value="medium">Medium</button>
+            <button type="button" class="sev" data-value="high">High</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">Location</span>
+          <button type="button" id="locateBtn" class="locate">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4Zm8.9 3a9 9 0 0 0-7.9-7.9V1h-2v2.1A9 9 0 0 0 3.1 11H1v2h2.1a9 9 0 0 0 7.9 7.9V23h2v-2.1a9 9 0 0 0 7.9-7.9H23v-2ZM12 19a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/></svg>
+            <span id="locText">Get my location</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <span class="label">Note (optional)</span>
+          <textarea id="note" rows="2" placeholder="e.g. deep pothole near junction"></textarea>
+        </div>
+
+        <button type="submit" class="primary" id="saveBtn">Save Report</button>
+      </form>
+    </section>
+
+    <section id="view-map" class="view">
+      <div id="map"></div>
+      <p class="hint" id="mapHint">Allow location or add a report to see markers.</p>
+    </section>
+
+    <section id="view-list" class="view">
+      <div id="list" class="list"></div>
+      <div class="list-tools">
+        <button type="button" id="exportBtn" class="ghost">Export JSON</button>
+        <button type="button" id="clearBtn" class="ghost danger">Clear all</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-view="report" class="tab active">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Report</span>
+    </button>
+    <button data-view="map" class="tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Zm0 2.2 4 1.3v11.3l-4-1.3V5.2Zm6 12.6V6.5l4-1.3v11.3l-4 1.3Z"/></svg>
+      <span>Map</span>
+    </button>
+    <button data-view="list" class="tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg>
+      <span>List</span>
+    </button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
