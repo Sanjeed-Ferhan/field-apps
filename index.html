@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>Field Apps</title>
+  <style>
+    :root { --bg:#0b1220; --surface:#16202f; --border:#2c3a4f; --text:#e6edf6; --muted:#93a4bb; --accent:#38bdf8; --amber:#f59e0b; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100dvh; background:radial-gradient(1200px 600px at 50% -10%, #1b2a44 0%, var(--bg) 60%); color:var(--text); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; display:flex; flex-direction:column; align-items:center; padding:48px 20px; }
+    header { text-align:center; margin-bottom:32px; }
+    header h1 { font-size:30px; margin:0 0 6px; letter-spacing:.3px; }
+    header p { color:var(--muted); margin:0; }
+    .grid { width:100%; max-width:720px; display:grid; gap:16px; grid-template-columns:1fr 1fr; }
+    @media (max-width:560px){ .grid { grid-template-columns:1fr; } }
+    a.card { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px; transition:transform .12s, border-color .15s, box-shadow .15s; }
+    a.card:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.35); }
+    a.civil:hover { border-color:var(--amber); }
+    a.road:hover { border-color:var(--accent); }
+    .icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+    .road .icon { background:rgba(56,189,248,.15); color:var(--accent); }
+    .civil .icon { background:rgba(245,158,11,.15); color:var(--amber); }
+    .card h2 { margin:0 0 6px; font-size:19px; }
+    .card p { margin:0; color:var(--muted); font-size:14px; }
+    footer { margin-top:36px; color:var(--muted); font-size:13px; }
+    footer a { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Field Apps</h1>
+    <p>Mobile-first reporting tools for roads and factory civil works</p>
+  </header>
+
+  <div class="grid">
+    <a class="card road" href="./road-report/">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Zm0 2.2 4 1.3v11.3l-4-1.3V5.2Zm6 12.6V6.5l4-1.3v11.3l-4 1.3Z"/></svg>
+      </div>
+      <h2>RoadWatch</h2>
+      <p>Report broken road surfaces with a photo, GPS location, and severity. View them on a map.</p>
+    </a>
+
+    <a class="card civil" href="./civil-requests/">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h16v2H4v-2Z"/></svg>
+      </div>
+      <h2>CivilDesk</h2>
+      <p>Raise factory civil work requests with a photo, typed or GPS location, priority, and status tracking.</p>
+    </a>
+  </div>
+
+  <footer>Source: <a href="https://github.com/Sanjeed-Ferhan/field-apps">github.com/Sanjeed-Ferhan/field-apps</a></footer>
+</body>
+</html>
